@@ -80,4 +80,10 @@ export default function SummaryCards({ suppliers = [] }) {
           <div className="stat-title">Product Categories</div>
           <div className="stat-value">{uniqueCategories}</div>
           <div className="stat-meta">
-        
+            <span>Active supply domains</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

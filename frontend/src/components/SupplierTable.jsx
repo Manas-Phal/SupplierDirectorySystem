@@ -54,6 +54,8 @@ export default function SupplierTable({
   onOpenAddModal,
   pagination,
 }) {
+  const safeSuppliers = Array.isArray(suppliers) ? suppliers : [];
+
   const handleHeaderClick = (field) => {
     if (onSort) {
       onSort(field);
@@ -78,7 +80,7 @@ export default function SupplierTable({
           <Loader2 size={36} className="spinner" style={{ color: 'var(--primary)' }} />
           <p>Loading suppliers from MongoDB...</p>
         </div>
-      ) : suppliers.length === 0 ? (
+      ) : safeSuppliers.length === 0 ? (
         <div className="table-empty-state">
           <div className="empty-icon-box">
             {isFiltered ? <SearchX size={32} /> : <Inbox size={32} />}
@@ -188,7 +190,7 @@ export default function SupplierTable({
                 </tr>
               </thead>
               <tbody>
-                {suppliers.map((supplier) => {
+                {safeSuppliers.map((supplier) => {
                   const displayId = supplier.supplierId || supplier.id || 'N/A';
                   const docId = supplier._id || supplier.id || displayId;
                   const initials = (supplier.name || '')

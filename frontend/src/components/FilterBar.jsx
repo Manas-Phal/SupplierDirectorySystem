@@ -195,82 +195,82 @@ export default function FilterBar({
             )}
 
             {/* Advanced Filters active chips */}
-            {advancedProps.advRating && (
+            {advancedProps?.advRating && (
               <span className="filter-chip">
                 Rating {advancedProps.ratingOp} {advancedProps.advRating}
-                <button type="button" onClick={() => advancedProps.onAdvRatingChange('')} aria-label="Remove rating operator filter">
+                <button type="button" onClick={() => advancedProps?.onAdvRatingChange?.('')} aria-label="Remove rating operator filter">
                   <X size={12} />
                 </button>
               </span>
             )}
 
-            {advancedProps.selectedInCities?.length > 0 && (
+            {advancedProps?.selectedInCities?.length > 0 && (
               <span className="filter-chip">
                 Cities in: [{advancedProps.selectedInCities.join(', ')}]
-                <button type="button" onClick={() => advancedProps.onResetInCities?.()} aria-label="Remove in-cities filter">
+                <button type="button" onClick={() => advancedProps?.onResetInCities?.()} aria-label="Remove in-cities filter">
                   <X size={12} />
                 </button>
               </span>
             )}
 
-            {advancedProps.selectedNinCities?.length > 0 && (
+            {advancedProps?.selectedNinCities?.length > 0 && (
               <span className="filter-chip chip-danger">
                 Not in cities: [{advancedProps.selectedNinCities.join(', ')}]
-                <button type="button" onClick={() => advancedProps.onResetNinCities?.()} aria-label="Remove nin-cities filter">
+                <button type="button" onClick={() => advancedProps?.onResetNinCities?.()} aria-label="Remove nin-cities filter">
                   <X size={12} />
                 </button>
               </span>
             )}
 
-            {advancedProps.selectedNinCategories?.length > 0 && (
+            {advancedProps?.selectedNinCategories?.length > 0 && (
               <span className="filter-chip chip-danger">
                 Not in categories: [{advancedProps.selectedNinCategories.join(', ')}]
-                <button type="button" onClick={() => advancedProps.onResetNinCategories?.()} aria-label="Remove nin-categories filter">
+                <button type="button" onClick={() => advancedProps?.onResetNinCategories?.()} aria-label="Remove nin-categories filter">
                   <X size={12} />
                 </button>
               </span>
             )}
 
-            {advancedProps.excludeName && (
+            {advancedProps?.excludeName && (
               <span className="filter-chip chip-danger">
                 Name $not: "{advancedProps.excludeName}"
-                <button type="button" onClick={() => advancedProps.onExcludeNameChange('')} aria-label="Remove exclude-name filter">
+                <button type="button" onClick={() => advancedProps?.onExcludeNameChange?.('')} aria-label="Remove exclude-name filter">
                   <X size={12} />
                 </button>
               </span>
             )}
 
-            {(advancedProps.norCity || advancedProps.norCategory) && (
+            {(advancedProps?.norCity || advancedProps?.norCategory) && (
               <span className="filter-chip chip-danger">
-                $nor: [{[advancedProps.norCity, advancedProps.norCategory].filter(Boolean).join(' | ')}]
-                <button type="button" onClick={() => { advancedProps.onNorCityChange(''); advancedProps.onNorCategoryChange(''); }} aria-label="Remove nor filter">
+                $nor: [{[advancedProps?.norCity, advancedProps?.norCategory].filter(Boolean).join(' | ')}]
+                <button type="button" onClick={() => { advancedProps?.onNorCityChange?.(''); advancedProps?.onNorCategoryChange?.(''); }} aria-label="Remove nor filter">
                   <X size={12} />
                 </button>
               </span>
             )}
 
-            {advancedProps.existsField && (
+            {advancedProps?.existsField && (
               <span className="filter-chip">
                 {advancedProps.existsField} $exists: {advancedProps.existsValue}
-                <button type="button" onClick={() => advancedProps.onExistsFieldChange('')} aria-label="Remove exists filter">
+                <button type="button" onClick={() => advancedProps?.onExistsFieldChange?.('')} aria-label="Remove exists filter">
                   <X size={12} />
                 </button>
               </span>
             )}
 
-            {advancedProps.typeField && (
+            {advancedProps?.typeField && (
               <span className="filter-chip">
                 {advancedProps.typeField} $type: {advancedProps.typeValue}
-                <button type="button" onClick={() => advancedProps.onTypeFieldChange('')} aria-label="Remove type filter">
+                <button type="button" onClick={() => advancedProps?.onTypeFieldChange?.('')} aria-label="Remove type filter">
                   <X size={12} />
                 </button>
               </span>
             )}
 
-            {advancedProps.matchMode === 'or' && (
+            {advancedProps?.matchMode === 'or' && (
               <span className="filter-chip" style={{ background: '#fef3c7', color: '#92400e', borderColor: '#fde68a' }}>
                 Mode: $or (ANY)
-                <button type="button" onClick={() => advancedProps.onMatchModeChange('and')} aria-label="Switch to and mode">
+                <button type="button" onClick={() => advancedProps?.onMatchModeChange?.('and')} aria-label="Switch to and mode">
                   <X size={12} />
                 </button>
               </span>
