@@ -170,22 +170,23 @@ export default function App() {
         limit: pageSize,
       });
 
-      setSuppliers(res.data);
-      setTotalMatchingCount(res.total);
-      setTotalPages(res.totalPages);
+      setSuppliers(Array.isArray(res?.data) ? res.data : []);
+      setTotalMatchingCount(typeof res?.total === 'number' ? res.total : 0);
+      setTotalPages(typeof res?.totalPages === 'number' ? res.totalPages : 1);
       setConnectionError(null);
 
       // Accumulate unique cities for dropdown options
-      if (Array.isArray(res.data) && res.data.length > 0) {
+      if (Array.isArray(res?.data) && res.data.length > 0) {
         setKnownCities((prev) => {
-          const combined = new Set([...prev, ...res.data.map((s) => s.city?.trim()).filter(Boolean)]);
+          const list = Array.isArray(prev) ? prev : [];
+          const combined = new Set([...list, ...res.data.map((s) => s.city?.trim()).filter(Boolean)]);
           return Array.from(combined).sort();
         });
       }
 
       // Update total unfiltered count if no filters are active
       if (!isFiltered) {
-        setTotalDatabaseCount(res.total);
+        setTotalDatabaseCount(typeof res?.total === 'number' ? res.total : 0);
       }
     } catch (err) {
       console.error('[Error fetching suppliers]:', err);
@@ -233,16 +234,23 @@ export default function App() {
   useEffect(() => {
     getSuppliers({ limit: 0 })
       .then((res) => {
-        setTotalDatabaseCount(res.total);
-        const cities = new Set(res.data.map((s) => s.city?.trim()).filter(Boolean));
-        setKnownCities(Array.from(cities).sort());
+        if (res && typeof res.total === 'number') {
+          setTotalDatabaseCount(res.total);
+        }
+        if (res && Array.isArray(res.data)) {
+          const cities = new Set(res.data.map((s) => s.city?.trim()).filter(Boolean));
+          setKnownCities(Array.from(cities).sort());
+        }
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.warn('[Initial supplier load non-fatal warning]:', err.message);
+      });
   }, []);
 
   // Available categories: predefined list + any custom categories in data
   const availableCategories = useMemo(() => {
-    const customCats = suppliers
+    const list = Array.isArray(suppliers) ? suppliers : [];
+    const customCats = list
       .map((s) => s.category?.trim())
       .filter((cat) => cat && cat !== 'Other');
     const set = new Set([...PREDEFINED_CATEGORIES, ...customCats]);
@@ -400,16 +408,16 @@ export default function App() {
     advRating,
     onAdvRatingChange: (val) => { setAdvRating(val); setCurrentPage(1); },
     selectedInCities,
-    onToggleInCity,
+    onToggleInCity: handleToggleInCity,
     onResetInCities: () => { setSelectedInCities([]); setCurrentPage(1); },
     selectedNinCities,
-    onToggleNinCity,
+    onToggleNinCity: handleToggleNinCity,
     onResetNinCities: () => { setSelectedNinCities([]); setCurrentPage(1); },
     selectedInCategories,
-    onToggleInCat,
+    onToggleInCat: handleToggleInCat,
     onResetInCategories: () => { setSelectedInCategories([]); setCurrentPage(1); },
     selectedNinCategories,
-    onToggleNinCat,
+    onToggleNinCat: handleToggleNinCat,
     onResetNinCategories: () => { setSelectedNinCategories([]); setCurrentPage(1); },
     excludeName,
     onExcludeNameChange: (val) => setExcludeName(val),
@@ -427,7 +435,7 @@ export default function App() {
     onTypeValueChange: (val) => { setTypeValue(val); setCurrentPage(1); },
     matchMode,
     onMatchModeChange: (val) => { setMatchMode(val); setCurrentPage(1); },
-    onResetAdvanced,
+    onResetAdvanced: handleResetAdvanced,
   };
 
   return (
@@ -515,7 +523,7 @@ export default function App() {
       <footer className="footer">
         <div>
           Supplier Directory System &bull; MongoDB Query Operator Suite &bull;{' '}
-          {suppliers.length} of {totalMatchingCount} Shown
+          {Array.isArray(suppliers) ? suppliers.length : 0} of {totalMatchingCount} Shown
         </div>
       </footer>
 

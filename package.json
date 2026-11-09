@@ -1,0 +1,13 @@
+{
+  "name": "supplier-directory-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Full-Stack Supplier Directory System with Express, React (Vite) and MongoDB",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build"
+  }
+}
+

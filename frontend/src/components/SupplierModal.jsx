@@ -15,7 +15,8 @@ export default function SupplierModal({
 
   // Generate an ID for new suppliers
   const generateNewId = () => {
-    const existingNums = existingSuppliers
+    const list = Array.isArray(existingSuppliers) ? existingSuppliers : [];
+    const existingNums = list
       .map((s) => {
         const idVal = s.supplierId || s.id || '';
         const match = idVal.match(/\d+/);
