@@ -569,6 +569,15 @@ button, input, select, textarea {
   color: var(--primary);
 }
 
+.th-sortable.th-sorted {
+  color: var(--primary);
+}
+
+.th-sortable.th-sorted .th-inner span {
+  color: var(--primary);
+  font-weight: 700;
+}
+
 .th-inner {
   display: flex;
   align-items: center;

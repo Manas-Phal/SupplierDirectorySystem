@@ -44,8 +44,8 @@ const getCategoryClass = (category) => {
 export default function SupplierTable({
   suppliers = [],
   isLoading = false,
-  sortField = 'createdAt',
-  sortDirection = 'desc',
+  sortField = 'name',
+  sortDirection = 'asc',
   onSort,
   onEdit,
   onDelete,
@@ -67,9 +67,9 @@ export default function SupplierTable({
       return <ArrowUpDown size={14} style={{ opacity: 0.35 }} />;
     }
     return sortDirection === 'asc' ? (
-      <ArrowUp size={14} style={{ color: 'var(--primary)' }} />
+      <ArrowUp size={14} style={{ color: 'var(--primary)', strokeWidth: 2.5 }} />
     ) : (
-      <ArrowDown size={14} style={{ color: 'var(--primary)' }} />
+      <ArrowDown size={14} style={{ color: 'var(--primary)', strokeWidth: 2.5 }} />
     );
   };
 
@@ -116,9 +116,9 @@ export default function SupplierTable({
               <thead>
                 <tr>
                   <th
-                    className="th-sortable"
+                    className={`th-sortable ${sortField === 'supplierId' ? 'th-sorted' : ''}`}
                     onClick={() => handleHeaderClick('supplierId')}
-                    title="Sort by Supplier ID"
+                    title={`Sort by Supplier ID (${sortField === 'supplierId' ? (sortDirection === 'asc' ? 'A → Z, click for Z → A' : 'Z → A, click for A → Z') : 'click to sort'})`}
                   >
                     <div className="th-inner">
                       <span>Supplier ID</span>
@@ -127,9 +127,9 @@ export default function SupplierTable({
                   </th>
 
                   <th
-                    className="th-sortable"
+                    className={`th-sortable ${sortField === 'name' ? 'th-sorted' : ''}`}
                     onClick={() => handleHeaderClick('name')}
-                    title="Sort by Name"
+                    title={`Sort by Name (${sortField === 'name' ? (sortDirection === 'asc' ? 'A → Z, click for Z → A' : 'Z → A, click for A → Z') : 'click to sort'})`}
                   >
                     <div className="th-inner">
                       <span>Name</span>
@@ -138,9 +138,9 @@ export default function SupplierTable({
                   </th>
 
                   <th
-                    className="th-sortable"
+                    className={`th-sortable ${sortField === 'city' ? 'th-sorted' : ''}`}
                     onClick={() => handleHeaderClick('city')}
-                    title="Sort by City"
+                    title={`Sort by City (${sortField === 'city' ? (sortDirection === 'asc' ? 'A → Z, click for Z → A' : 'Z → A, click for A → Z') : 'click to sort'})`}
                   >
                     <div className="th-inner">
                       <span>City</span>
@@ -161,9 +161,9 @@ export default function SupplierTable({
                   </th>
 
                   <th
-                    className="th-sortable"
+                    className={`th-sortable ${sortField === 'category' ? 'th-sorted' : ''}`}
                     onClick={() => handleHeaderClick('category')}
-                    title="Sort by Category"
+                    title={`Sort by Category (${sortField === 'category' ? (sortDirection === 'asc' ? 'A → Z, click for Z → A' : 'Z → A, click for A → Z') : 'click to sort'})`}
                   >
                     <div className="th-inner">
                       <span>Category</span>
@@ -172,9 +172,9 @@ export default function SupplierTable({
                   </th>
 
                   <th
-                    className="th-sortable"
+                    className={`th-sortable ${sortField === 'rating' ? 'th-sorted' : ''}`}
                     onClick={() => handleHeaderClick('rating')}
-                    title="Sort by Rating"
+                    title={`Sort by Rating (${sortField === 'rating' ? (sortDirection === 'desc' ? 'High → Low, click for Low → High' : 'Low → High, click for High → Low') : 'click to sort'})`}
                   >
                     <div className="th-inner">
                       <span>Rating</span>

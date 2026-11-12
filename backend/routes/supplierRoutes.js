@@ -192,20 +192,40 @@ router.get('/', async (req, res) => {
       }
     }
 
-    // 12. Sorting
+    // 12. Sorting (Case-insensitive collation for strings)
     const sort = {};
     const sortDirection = order && order.toLowerCase() === 'desc' ? -1 : 1;
 
-    if (sortBy === 'name') {
-      sort.name = sortDirection;
-    } else if (sortBy === 'rating') {
-      sort.rating = sortDirection;
-    } else if (sortBy === 'supplierId' || sortBy === 'id') {
-      sort.supplierId = sortDirection;
-    } else if (sortBy === 'city') {
-      sort.city = sortDirection;
-    } else {
-      sort.createdAt = -1;
+    switch (sortBy?.toLowerCase()) {
+      case 'name':
+        sort.name = sortDirection;
+        sort.supplierId = 1;
+        break;
+      case 'rating':
+        sort.rating = sortDirection;
+        sort.name = 1;
+        break;
+      case 'supplierid':
+      case 'id':
+        sort.supplierId = sortDirection;
+        break;
+      case 'city':
+        sort.city = sortDirection;
+        sort.name = 1;
+        break;
+      case 'category':
+        sort.category = sortDirection;
+        sort.name = 1;
+        break;
+      case 'createdat':
+      case 'date':
+      case 'newest':
+        sort.createdAt = sortDirection;
+        break;
+      default:
+        sort.name = 1;
+        sort.supplierId = 1;
+        break;
     }
 
     // 13. Pagination & Configurable Result Limits
@@ -217,7 +237,9 @@ router.get('/', async (req, res) => {
     let limitNum = limit === 'all' || limit === '0' ? 0 : parseInt(limit, 10);
     if (isNaN(limitNum) || limitNum < 0) limitNum = 10;
 
-    let query = Supplier.find(filter).sort(sort);
+    let query = Supplier.find(filter)
+      .collation({ locale: 'en', strength: 2 })
+      .sort(sort);
     if (limitNum > 0) {
       query = query.skip((pageNum - 1) * limitNum).limit(limitNum);
     }

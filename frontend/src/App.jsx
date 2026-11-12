@@ -264,8 +264,15 @@ export default function App() {
       setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
     } else {
       setSortField(field);
-      setSortDirection('asc');
+      setSortDirection(field === 'rating' ? 'desc' : 'asc');
     }
+    setCurrentPage(1);
+  };
+
+  const handleSortSelect = (combinedValue) => {
+    const [field, direction] = combinedValue.split('-');
+    setSortField(field);
+    setSortDirection(direction || 'asc');
     setCurrentPage(1);
   };
 
@@ -357,13 +364,15 @@ export default function App() {
     setCurrentPage(1);
   };
 
-  // Reset All Filters (Basic + Advanced)
+  // Reset All Filters (Basic + Advanced + Sort)
   const handleResetFilters = () => {
     setSearchTerm('');
     setDebouncedSearch('');
     setSelectedCity('ALL');
     setSelectedCategory('ALL');
     setSelectedRating('ALL');
+    setSortField('name');
+    setSortDirection('asc');
     handleResetAdvanced();
     setCurrentPage(1);
   };
@@ -485,6 +494,9 @@ export default function App() {
           onCategoryChange={(c) => { setSelectedCategory(c); setCurrentPage(1); }}
           selectedRating={selectedRating}
           onRatingChange={(r) => { setSelectedRating(r); setCurrentPage(1); }}
+          sortField={sortField}
+          sortDirection={sortDirection}
+          onSortChange={handleSortSelect}
           availableCities={knownCities}
           availableCategories={availableCategories}
           onResetFilters={handleResetFilters}

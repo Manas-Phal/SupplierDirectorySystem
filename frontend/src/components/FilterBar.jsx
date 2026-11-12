@@ -2,6 +2,24 @@ import React from 'react';
 import { Search, ChevronDown, ChevronUp, X, SlidersHorizontal } from 'lucide-react';
 import AdvancedFilters from './AdvancedFilters';
 
+const getSortLabel = (field, direction) => {
+  const map = {
+    'name-asc': 'Name (A → Z)',
+    'name-desc': 'Name (Z → A)',
+    'rating-desc': 'Rating (High → Low)',
+    'rating-asc': 'Rating (Low → High)',
+    'supplierId-asc': 'Supplier ID (A → Z)',
+    'supplierId-desc': 'Supplier ID (Z → A)',
+    'city-asc': 'City (A → Z)',
+    'city-desc': 'City (Z → A)',
+    'category-asc': 'Category (A → Z)',
+    'category-desc': 'Category (Z → A)',
+    'createdAt-desc': 'Newest Added First',
+    'createdAt-asc': 'Oldest Added First',
+  };
+  return map[`${field}-${direction}`] || `${field} (${direction})`;
+};
+
 export default function FilterBar({
   searchTerm,
   onSearchChange,
@@ -11,6 +29,9 @@ export default function FilterBar({
   onCategoryChange,
   selectedRating,
   onRatingChange,
+  sortField = 'name',
+  sortDirection = 'asc',
+  onSortChange,
   availableCities = [],
   availableCategories = [],
   onResetFilters,
@@ -29,7 +50,8 @@ export default function FilterBar({
     selectedRating !== 'ALL'
   );
 
-  const isAnyFiltered = isBasicFiltered || activeAdvancedCount > 0;
+  const isSortChanged = sortField !== 'name' || sortDirection !== 'asc';
+  const isAnyFiltered = isBasicFiltered || activeAdvancedCount > 0 || isSortChanged;
 
   return (
     <div className="controls-card">
@@ -112,6 +134,31 @@ export default function FilterBar({
             <ChevronDown size={16} className="select-chevron" />
           </div>
 
+          {/* Sort By Dropdown */}
+          <div className={`filter-select-wrapper ${isSortChanged ? 'active-filter' : ''}`}>
+            <select
+              className="filter-select"
+              value={`${sortField}-${sortDirection}`}
+              onChange={(e) => onSortChange && onSortChange(e.target.value)}
+              aria-label="Sort Suppliers"
+              title="Sort suppliers by rating, name, city, category, or ID"
+            >
+              <option value="name-asc">Sort: Name (A → Z)</option>
+              <option value="name-desc">Sort: Name (Z → A)</option>
+              <option value="rating-desc">Sort: Rating (High → Low)</option>
+              <option value="rating-asc">Sort: Rating (Low → High)</option>
+              <option value="supplierId-asc">Sort: Supplier ID (A → Z)</option>
+              <option value="supplierId-desc">Sort: Supplier ID (Z → A)</option>
+              <option value="city-asc">Sort: City (A → Z)</option>
+              <option value="city-desc">Sort: City (Z → A)</option>
+              <option value="category-asc">Sort: Category (A → Z)</option>
+              <option value="category-desc">Sort: Category (Z → A)</option>
+              <option value="createdAt-desc">Sort: Newest Added First</option>
+              <option value="createdAt-asc">Sort: Oldest Added First</option>
+            </select>
+            <ChevronDown size={16} className="select-chevron" />
+          </div>
+
           {/* Advanced Filters Toggle Button */}
           <button
             type="button"
@@ -189,6 +236,14 @@ export default function FilterBar({
               <span className="filter-chip">
                 Rating: ≥ {selectedRating}★
                 <button type="button" onClick={() => onRatingChange('ALL')} aria-label="Remove rating filter">
+                  <X size={12} />
+                </button>
+              </span>
+            )}
+            {isSortChanged && (
+              <span className="filter-chip">
+                Sorted: {getSortLabel(sortField, sortDirection)}
+                <button type="button" onClick={() => onSortChange && onSortChange('name-asc')} aria-label="Reset sorting to Name A-Z">
                   <X size={12} />
                 </button>
               </span>
